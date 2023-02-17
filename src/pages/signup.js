@@ -10,9 +10,9 @@ export default function SignUp() {
     }
     const onSubmit=(e)=>{
         // e.preventDefault();
-        setArray([data])
+        setArray([data]);
     }
-    console.log(array)
+    console.log(array);
   return (
     <>
 <div className="h-screen flex">
