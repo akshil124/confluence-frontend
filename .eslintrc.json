@@ -28,7 +28,6 @@
       "react/jsx-uses-react": 1,
       "object-curly-spacing": ["error", "always"],
       "react/jsx-curly-brace-presence": [0, "never"],
-      "max-len": [2, 160],
       "semi": ["error", "always"],
       "indent": ["error", 4],
       "no-mixed-operators": 0,
