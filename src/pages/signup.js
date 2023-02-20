@@ -26,10 +26,10 @@ export default function SignUp () {
     });
     const formOptions = { resolver: yupResolver(formSchema) };
     const { register, handleSubmit, formState: { errors } } = useForm(formOptions);
-    const [array, setArray] = useState([]);
+    const [formData, setFormData] = useState([]);
 
     const onSubmit = (e) => {
-        setArray([...array, e]);
+        setFormData([...formData, e]);
     };
 
     return (
