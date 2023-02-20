@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 const Login = () => {
-    const [data, setData] = useState([]);
+    const [loginData, setLoginData] = useState([]);
     const [successMsg, setSuccessMsg] = useState('');
     const [show, setShow] = useState(false);
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState();
     const {
         register,
         handleSubmit,
@@ -15,13 +15,13 @@ const Login = () => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
     const onSubmit = (e) => {
-        setData([...data, user]);
+        setLoginData([...loginData, user]);
         setSuccessMsg('User registration is successful.');
         reset();
     };
     return (
         <div className="h-screen flex">
-            <div className="w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 justify-around items-center i hidden sm:flex ">
+            <div className="w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 justify-around items-center i hidden sm:flex">
                 <div>
                     <h1 className="text-white font-bold text-4xl font-sans">Confluence</h1>
                     <p className="text-white mt-1">The simplest app to use</p>
@@ -87,7 +87,6 @@ const Login = () => {
                         )}
                     </div>
                     <button type="submit" className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">Login</button>
-                    <span className="text-sm ml-2 hover:text-blue-500 cursor-pointer">Forgot Password ?</span>
                 </form>
             </div>
         </div>

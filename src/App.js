@@ -1,10 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
-import React from "react";
-import Login from "./pages/Login";
+import React from 'react';
+import Login from './pages/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SignUp from './pages/signup';
-function App() {
+function App () {
     return (
         <BrowserRouter>
             <Routes>
@@ -12,7 +11,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />}/>
             </Routes>
         </BrowserRouter>
-    )
+    );
 }
 
 export default App;
