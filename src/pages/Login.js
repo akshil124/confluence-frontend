@@ -13,6 +13,9 @@ const LOGIN_USER = gql`
         email
         password
         token
+        category
+        employees
+        name
     }
   }
 `;
@@ -38,6 +41,14 @@ const Login = () => {
         }).then((res) => {
             navigate('/plan');
             toast.success('Login Successfully');
+            const data = res.data.loginUser;
+            const user = {
+                email: data.email,
+                name: data.name,
+                category: data.category,
+                employees: data.employees
+            };
+            localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', res.data.loginUser.token);
         }).catch((err) => {
             toast.error('Login Unsuccessfully');
