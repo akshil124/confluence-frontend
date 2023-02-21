@@ -1,23 +1,49 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { gql, useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const LOGIN_USER = gql`
+  mutation loginUser(
+    $email: String!
+    $password: String!
+  ) {
+    loginUser(email: $email, password: $password) {
+        email
+        password
+        token
+    }
+  }
+`;
 const Login = () => {
-    const [loginData, setLoginData] = useState([]);
-    const [successMsg, setSuccessMsg] = useState('');
     const [passwordShow, setPasswordShow] = useState(false);
     const [user, setUser] = useState();
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors }
     } = useForm();
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
+    const [checkAdmin, { error }] = useMutation(LOGIN_USER);
     const onSubmit = (e) => {
-        setLoginData([...loginData, user]);
-        setSuccessMsg('User registration is successful.');
-        reset();
+        checkAdmin({
+            variables: {
+                email: e.email,
+                password: e.password
+            }
+        }).then((res) => {
+            navigate('/plan');
+            toast.success('Login Successfully');
+            localStorage.setItem('token', res.data.loginUser.token);
+        }).catch((err) => {
+            toast.error('Login Unsuccessfully');
+            // eslint-disable-next-line no-console
+            console.log('err', err);
+        });
     };
     return (
         <div className="h-screen flex">
@@ -28,11 +54,11 @@ const Login = () => {
                     <button type="submit" className="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2  ">Read More</button>
                 </div>
             </div>
+            <ToastContainer />
             <div className="flex w-1/2 justify-center items-center bg-white w-full md:w-3/4  lg:w-1/2 flex flex-col items-center bg-slate-50 rounded-md pt-12 ">
                 <form className="bg-white" onSubmit={handleSubmit(onSubmit)}>
                     <h1 className="text-gray-800 font-bold text-2xl mb-1">Hello Again!</h1>
                     <p className="text-sm font-normal text-gray-600 mb-7">Welcome Back</p>
-                    {successMsg && <p className="flex items-center  bg-blue-100 border-blue-500 text-blue-700 text-sm font-bold px-4 py-3 rounded relative mb-4">{successMsg}</p>}
                     <div className="mb-4">
                         <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,16 +100,8 @@ const Login = () => {
                         {errors.password?.type === 'required' && (
                             <p className="text-red-500 text-sm mt-1 mb-4 pl-4">Password is required.</p>
                         )}
-                        {errors.password?.type === 'checkLength' && (
-                            <p className="text-red-500 text-sm mt-1 mb-4 pl-4">
-                                Password should be at-least 6 characters.
-                            </p>
-                        )}
-                        {errors.password?.type === 'matchPattern' && (
-                            <p className="text-red-500 text-sm mt-1 mb-4 pl-4">
-                                Password should contain at least one uppercase letter,<br/> lowercase
-                                letter, digit, and special symbol.
-                            </p>
+                        {error && (
+                            <p className="text-red-500 text-sm mt-1 mb-4 pl-4">Password is invalid.</p>
                         )}
                     </div>
                     <button type="submit" className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">Login</button>
