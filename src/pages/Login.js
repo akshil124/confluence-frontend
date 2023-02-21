@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const LOGIN_USER = gql`
   mutation loginUser(
@@ -54,7 +54,6 @@ const Login = () => {
                     <button type="submit" className="block w-28 bg-white text-indigo-800 mt-4 py-2 rounded-2xl font-bold mb-2  ">Read More</button>
                 </div>
             </div>
-            <ToastContainer />
             <div className="flex w-1/2 justify-center items-center bg-white w-full md:w-3/4  lg:w-1/2 flex flex-col items-center bg-slate-50 rounded-md pt-12 ">
                 <form className="bg-white" onSubmit={handleSubmit(onSubmit)}>
                     <h1 className="text-gray-800 font-bold text-2xl mb-1">Hello Again!</h1>
