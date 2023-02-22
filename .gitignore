@@ -13,6 +13,10 @@ package-lock.json
 # production
 /build
 
+#zip & patch
+.zip
+.patch
+
 # misc
 .DS_Store
 .env.local
