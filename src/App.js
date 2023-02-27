@@ -1,26 +1,23 @@
 import './App.css';
 import React from 'react';
 import Login from './pages/Login';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AddUser from './pages/AddUser';
+import { Route, Routes } from 'react-router-dom';
 import SignUp from './pages/signup';
 import Plan from './Components/PricingPlan/Plan';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-
-const client = new ApolloClient({
-    uri: 'http://localhost:3000/dev/graphql',
-    cache: new InMemoryCache()
-});
+import Form from './pages/CreateForm';
+import Header from './Components/Header';
 function App () {
     return (
-        <BrowserRouter>
-            <ApolloProvider client={client}>
-                <Routes>
-                    <Route path="/login" element={<Login />}/>
-                    <Route path="/signup" element={<SignUp />}/>
-                    <Route path="/plan" element={<Plan />}/>
-                </Routes>
-            </ApolloProvider>
-        </BrowserRouter>
+        <Routes>
+            <Route path="/login" element={<Login />}/>
+            <Route path="/signup" element={<SignUp />}/>
+            <Route path="/" element={<Header/>}>
+                <Route path='/plan' element={<Plan />}/>
+                <Route path='/add-user' element={<AddUser />} />
+                <Route path='/form' element={<Form />} />
+            </Route>
+        </Routes>
     );
 }
 

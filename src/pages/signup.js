@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { gql, useMutation } from '@apollo/client';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const SIGNUP_USER = gql`
-  mutation createOrganizationmutation(
+  mutation PostMutation(
     $name: String!
     $email: String!
     $category: String!
@@ -44,23 +46,25 @@ export default function SignUp () {
     const formOptions = { resolver: yupResolver(formSchema) };
     const [passwordShow, setPasswordShow] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm(formOptions);
-    const [newOrganization] = useMutation(SIGNUP_USER);
     const navigate = useNavigate();
-
-    const onSubmit = (e) => {
-        newOrganization({
+    const [newOrganization, { error }] = useMutation(SIGNUP_USER);
+    const onSubmit = async (e) => {
+        await newOrganization({
             variables: {
                 name: e.name,
                 email: e.email,
                 category: e.category,
                 employees: e.employees,
                 password: e.password
-            },
-            onCompleted: () => navigate('/login')
+            }
         }
-        );
+        ).then((res) => {
+            toast.success('Create Account Successfully');
+            navigate('/plan');
+        }).catch((err) => {
+            toast.error(err?.message);
+        });
     };
-
     return (
         <>
             <div className="h-screen flex">
@@ -75,6 +79,7 @@ export default function SignUp () {
                     <form className="bg-white" onSubmit={handleSubmit(onSubmit)}>
                         <h1 className="text-gray-800 font-bold text-2xl mb-1">Sign Up</h1>
                         <p className="text-sm font-normal text-gray-600 mb-7">Please fill in this form to create an account!</p>
+                        {error && <p className="flex items-center  bg-blue-100 border-blue-500 text-red-600 text-sm font-bold px-4 py-3 rounded relative mb-4">{error.message}</p>}
                         <div className="flex items-center border-2 py-2 px-3 rounded-2xl mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />

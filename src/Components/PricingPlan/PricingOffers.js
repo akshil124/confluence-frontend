@@ -1,5 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const PricingOffers = (offersData, i) => {
+    const navigate = useNavigate();
     const offer = offersData.offersData;
     const startEnd = ` lg:w-96 p-8 bg-white text-center rounded-3xl shadow-xl flex flex-col w-11/12 sm:w-full ${offer.planType === 'Basic' ? 'lg:pr-16 md:pr-5' : 'lg:pl-16 md:pl-8 '}`;
     const middle = 'lg:w-80 p-8 bg-gray-900 text-center rounded-3xl text-white border-4 shadow-xl border-white w-9/12 transform scale-125 flex flex-col  sm:w-full  ';
@@ -27,7 +30,7 @@ const PricingOffers = (offersData, i) => {
                 })}
                 <a href="#" className="">
                     <p className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white ">
-                        <span className="font-medium">
+                        <span className="font-medium" onClick={navigate('/login')}>
                                     Choose Plan
                         </span>
                     </p>
