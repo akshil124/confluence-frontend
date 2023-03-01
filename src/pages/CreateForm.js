@@ -25,7 +25,6 @@ const NEW_USER = gql`
     }
   }
 `;
-
 export default function Form () {
     const dispatch = useDispatch();
     const formSchema = Yup.object().shape({

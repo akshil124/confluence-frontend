@@ -15,7 +15,7 @@ function App () {
             <Route path="/" element={<Header/>}>
                 <Route path='/plan' element={<Plan />}/>
                 <Route path='/add-user' element={<AddUser />} />
-                <Route path='/form' element={<Form />} />
+                <Route path='/user-information' element={<Form />} />
             </Route>
         </Routes>
     );
