@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PricingOffers from '../Components/PricingPlan/PricingOffers';
+import UpiIdModel from '../Components/models/upiIdModel';
+import { useDispatch } from 'react-redux';
+import { createOrderUpi } from '../redux/cashFree/cashFreeThunk';
 const Plan = () => {
-    const planPage = [{ planType: 'Basic', price: '5', message: ['Get started with messaging', 'Flexible team meetings', '5 TB cloud storage'] },
-        { planType: 'StartUp', price: '25', message: ['All features in Basic', 'Flexible call scheduling ', '15 TB cloud storage'] },
-        { planType: 'Enterprise', price: '35', message: ['All features in Startup', 'Growth oriented', 'Unlimited cloud storage'] }];
+    const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
+
+    const planPage = [{ planType: 'Basic', price: '500', message: ['Get started with kanban board', 'Flexible team meetings', '5 Team Leader'] },
+        { planType: 'StartUp', price: '1500', message: ['All features in Basic', 'Flexible call scheduling ', '10 Team Leader'] },
+        { planType: 'Enterprise', price: '3000', message: ['All features in Startup', 'Growth oriented', 'As You Want Team Leader'] }];
+
+    const buyPlanForOrganization = (amount) => {
+        const OrganizationInfo = JSON.parse(localStorage.getItem('createdUser'));
+        const data = {
+            customer_id: OrganizationInfo._id,
+            customer_email: OrganizationInfo.email,
+            customer_phone: OrganizationInfo.number,
+            amount
+        };
+        dispatch(createOrderUpi({ data, onCreateOrder }));
+    };
+
+    const onCreateOrder = () => {
+        setOpen(!open);
+    };
+
     return (<div className="font-sans bg-gray-100">
+        <UpiIdModel opens={open} setOpens={setOpen}/>
         <div className="min-h-screen flex justify-center items-center">
             <div className="">
                 <div className="text-center font-semibold">
@@ -20,7 +43,7 @@ const Plan = () => {
                     {/* eslint-disable-next-line array-callback-return */}
                     {planPage && planPage.map((offers, index) => {
                         // eslint-disable-next-line react/jsx-key
-                        return (<PricingOffers offersData={offers} key={index}/>);
+                        return (<PricingOffers offersData={offers} key={index} buyPlanForOrganization={buyPlanForOrganization}/>);
                     })}
                 </div>
             </div>

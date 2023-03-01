@@ -50,10 +50,8 @@ const Login = () => {
             };
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', res.data.loginUser.token);
-        }).catch((err) => {
+        }).catch(() => {
             toast.error('invalid credentials');
-            // eslint-disable-next-line no-console
-            console.log('err', err);
         });
     };
     return (

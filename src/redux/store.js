@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './user/userSlice';
+import userReducer from './organization/organizationSlice';
+import upiReducer from './cashFree/cashFreeSlice';
 
 export const store = configureStore({
     reducer: {
-        user: userReducer
+        user: userReducer,
+        Upi: upiReducer
     }
 });

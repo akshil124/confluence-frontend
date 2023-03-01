@@ -2,30 +2,15 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { gql, useMutation } from '@apollo/client';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
-const SIGNUP_USER = gql`
-  mutation PostMutation(
-    $name: String!
-    $email: String!
-    $category: String!
-    $employees: String!
-    $password: String!
-  ) {
-    createOrganization(name: $name, email: $email, employees: $employees, category: $category, password: $password) {
-        name
-        email
-        employees
-        category
-        password
-    }
-  }
-`;
+import { createOrganization } from '../redux/organization/organizationThunk';
 
 export default function SignUp () {
+    const [passwordShow, setPasswordShow] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const formSchema = Yup.object().shape({
         name: Yup.string()
             .required('name is mendatory'),
@@ -41,29 +26,19 @@ export default function SignUp () {
             .matches(/[A-Z]+/, 'One uppercase character')
             .matches(/[@$!%*#?&]+/, 'One special character')
             .matches(/\d+/, 'One number')
-            .min(8, 'Must be 8 characters or more')
+            .min(8, 'Must be 8 characters or more'),
+        number: Yup.string()
+            .required('number is mendatory')
+            .min(10, 'Must be 10 characters or more')
     });
     const formOptions = { resolver: yupResolver(formSchema) };
-    const [passwordShow, setPasswordShow] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm(formOptions);
-    const navigate = useNavigate();
-    const [newOrganization, { error }] = useMutation(SIGNUP_USER);
-    const onSubmit = async (e) => {
-        await newOrganization({
-            variables: {
-                name: e.name,
-                email: e.email,
-                category: e.category,
-                employees: e.employees,
-                password: e.password
-            }
-        }
-        ).then((res) => {
-            toast.success('Create Account Successfully');
-            navigate('/plan');
-        }).catch((err) => {
-            toast.error(err?.message);
-        });
+    const { register, reset, handleSubmit, formState: { errors } } = useForm(formOptions);
+    const onSubmit = async (data) => {
+        await dispatch(createOrganization({ data, onCreateOrganization }));
+    };
+    const onCreateOrganization = () => {
+        reset();
+        navigate('/plan');
     };
     return (
         <>
@@ -79,7 +54,7 @@ export default function SignUp () {
                     <form className="bg-white" onSubmit={handleSubmit(onSubmit)}>
                         <h1 className="text-gray-800 font-bold text-2xl mb-1">Sign Up</h1>
                         <p className="text-sm font-normal text-gray-600 mb-7">Please fill in this form to create an account!</p>
-                        {error && <p className="flex items-center  bg-blue-100 border-blue-500 text-red-600 text-sm font-bold px-4 py-3 rounded relative mb-4">{error.message}</p>}
+                        {/* {error && <p className="flex items-center  bg-blue-100 border-blue-500 text-red-600 text-sm font-bold px-4 py-3 rounded relative mb-4">{error.message}</p>} */}
                         <div className="flex items-center border-2 py-2 px-3 rounded-2xl mt-4">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
@@ -92,7 +67,7 @@ export default function SignUp () {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                             </svg>
-                            <input className="pl-2 outline-none border-none" type="text" name="email" id="" placeholder="Email Address" {...register('email', { required: true })}/>
+                            <input className="pl-2 w-full outline-none border-none" type="text" name="email" id="" placeholder="Email Address" {...register('email', { required: true })}/>
                         </div>
                         {errors.email && <span className="text-red-600 flex pl-4">{errors.email?.message}</span>}
 
@@ -100,7 +75,15 @@ export default function SignUp () {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                             </svg>
-                            <input className="pl-2 outline-none border-none" type="number" name="employees" id="" placeholder="Number of Employ" {...register('employees', { required: true })}/>
+                            <input className="pl-2 w-full outline-none border-none" type="number" name="number" id="" placeholder="Number" {...register('number', { required: true })}/>
+                        </div>
+                        {errors.number && <span className="text-red-600 flex pl-4">{errors.number?.message}</span>}
+
+                        <div className="flex items-center border-2 py-2 px-3 rounded-2xl mt-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                            <input className="pl-2 w-full outline-none border-none" type="number" name="employees" id="" placeholder="Number of Employ" {...register('employees', { required: true })}/>
                         </div>
                         {errors.employees && <span className="text-red-600 flex pl-4">{errors.employees?.message}</span>}
 
@@ -108,7 +91,7 @@ export default function SignUp () {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                             </svg>
-                            <select className="pl-2 outline-none border-none w-full" type="number" name="category" id="" placeholder="Select Category" {...register('category', { required: true })}>
+                            <select className="pl-2 w-full outline-none border-none w-full" type="number" name="category" id="" placeholder="Select Category" {...register('category', { required: true })}>
 
                                 <option value="" disabled selected>Choose here</option>
                                 <option value="Playing">Playing</option>
@@ -125,7 +108,7 @@ export default function SignUp () {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                             </svg>
-                            <input className="pl-2 outline-none border-none" type={passwordShow ? 'text' : 'password'} name="password" id="" placeholder="password" {...register('password', { required: true })}/>
+                            <input className="pl-2  outline-none border-none" type={passwordShow ? 'text' : 'password'} name="password" id="" placeholder="password" {...register('password', { required: true })}/>
                             <label onClick={() => { setPasswordShow(!passwordShow); }}
                                 className="bg-gray-300 hover:bg-gray-400 rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer js-password-label"
                             >{passwordShow ? 'hide' : 'show'}</label>

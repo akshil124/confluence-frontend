@@ -42,7 +42,7 @@ const AddUser = () => {
             }
         }).then((res) => {
             toast.success('Add User Successfully');
-            navigate('/user-information');
+            navigate('/organization-information');
         }).catch((err) => {
             toast.error(err?.message);
         });
