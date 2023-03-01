@@ -3,13 +3,40 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@apollo/client';
 import { ToastContainer } from 'react-toastify';
+import { setContext } from '@apollo/client/link/context';
+import 'react-toastify/dist/ReactToastify.css';
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
 
+const httpLink = createHttpLink({ uri: 'http://localhost:3000/dev/graphql' });
+
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('token');
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : ' '
+        }
+    };
+});
+export const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache()
+});
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <ToastContainer />
-        <App/>
+        <BrowserRouter>
+            <ApolloProvider client={client}>
+                <Provider store={store}>
+                    <ToastContainer/>
+                    <App/>
+                </Provider>
+            </ApolloProvider>
+        </BrowserRouter>
     </React.StrictMode>
 );
 
