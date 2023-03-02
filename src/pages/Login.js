@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -39,7 +39,7 @@ const Login = () => {
                 password: e.password
             }
         }).then((res) => {
-            navigate('/plan');
+            navigate('/');
             toast.success('Login Successfully');
             const data = res.data.loginUser;
             const user = {
@@ -51,7 +51,7 @@ const Login = () => {
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', res.data.loginUser.token);
         }).catch((err) => {
-            toast.error('Login Unsuccessfully');
+            toast.error('invalid credentials');
             // eslint-disable-next-line no-console
             console.log('err', err);
         });

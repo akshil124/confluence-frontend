@@ -31,6 +31,7 @@ const Header = () => {
         } else if (title === 'settings') {
             setOpen(false);
         } else if (title === 'sign-out') {
+            localStorage.clear();
             setOpen(false);
         }
     };
@@ -38,7 +39,7 @@ const Header = () => {
     return (
         <>
             <nav
-                className="sticky top-0 z-0 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-[0_35px_50px_-15px_rgba(0,0,0,0.2)]">
+                className="sticky top-0 z-0 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-[0_35px_50px_-15px_rgba(0,0,0,0.2)] z-10">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-start">
@@ -84,7 +85,7 @@ const Header = () => {
                 role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1">
                 <Link to="/" onClick={() => handleMenu('profile')} className="block px-4 py-2 hover:bg-indigo-600 hover:text-white text-sm text-gray-700" role="menuitem" tabIndex="-1"
                     id="user-menu-item-0">Your Profile</Link>
-                <Link to="/" onClick={() => handleMenu('sign-out')} className="block px-4 py-2 hover:bg-indigo-600 hover:text-white text-sm text-gray-700" role="menuitem" tabIndex="-1"
+                <Link to="/login" onClick={() => handleMenu('sign-out')} className="block px-4 py-2 hover:bg-indigo-600 hover:text-white text-sm text-gray-700" role="menuitem" tabIndex="-1"
                     id="user-menu-item-2">Sign out</Link>
             </div>
             <aside id="logo-sidebar"

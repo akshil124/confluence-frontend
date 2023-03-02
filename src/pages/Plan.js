@@ -1,5 +1,5 @@
 import React from 'react';
-import PricingOffers from './PricingOffers';
+import PricingOffers from '../Components/PricingPlan/PricingOffers';
 const Plan = () => {
     const planPage = [{ planType: 'Basic', price: '5', message: ['Get started with messaging', 'Flexible team meetings', '5 TB cloud storage'] },
         { planType: 'StartUp', price: '25', message: ['All features in Basic', 'Flexible call scheduling ', '15 TB cloud storage'] },
