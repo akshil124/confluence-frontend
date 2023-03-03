@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import SignUp from './pages/signup';
 import Plan from './pages/Plan';
 import Form from './pages/CreateForm';
-import Header from './Components/Header';
+import Header from './Components/Layouts/Header';
 function App () {
     return (
         <Routes>
