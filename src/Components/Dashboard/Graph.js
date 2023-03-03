@@ -27,7 +27,7 @@ const Graph = () => {
     return (
         <>
             <div className="ml-8 mb-4"><b>Summary Tasks</b></div>
-            <ResponsiveContainer width={600} height={300}>
+            <ResponsiveContainer height={300}>
                 <LineChart data={data}>
                     <XAxis dataKey="name"/>
                     <YAxis/>

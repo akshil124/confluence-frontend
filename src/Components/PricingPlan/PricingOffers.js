@@ -31,7 +31,7 @@ const PricingOffers = ({ offersData, buyPlanForOrganization }) => {
                     </p>);
                 })}
                 <div className="w-full py-4 bg-blue-600 mt-8 rounded-xl text-white font-medium">
-                    <button className="w-full" onClick={() => buyPlanForOrganization(offer.price)}>
+                    <button className="w-full" onClick={() => buyPlanForOrganization({ amount: offer.price, plan: offer.planType })}>
                         Choose Plan
                     </button>
                 </div>

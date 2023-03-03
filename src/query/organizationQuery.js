@@ -20,3 +20,23 @@ export const createOrganizationQuery = `
           }
     }
 `;
+
+export const loginOrganizationQuery = `
+    mutation loginOrganizationMutation(
+        $email:String!,
+        $password:String!,
+    ) {
+          loginUser(email:$email,password:$password){
+            _id
+            name
+            email
+            category
+            employees
+            password
+            number
+            plan
+            planStatus,
+            token
+          }
+    }
+`;

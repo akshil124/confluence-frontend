@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createOrderUpi, createOrderPayUrl } from './cashFreeThunk';
+import { createOrderUpi, createOrderPayUrl, checkPaymentStatus } from './cashFreeThunk';
 import { toast } from 'react-toastify';
 
 const initialState = {
@@ -47,6 +47,25 @@ export const cashFreeSlice = createSlice({
             });
         builder
             .addCase(createOrderPayUrl.rejected, (state, action) => {
+                if (action.payload?.data.errors?.length && action.payload?.data?.errors[0]?.message) {
+                    toast.error(action.payload?.data?.errors[0]?.message);
+                }
+            });
+        builder
+            .addCase(checkPaymentStatus.pending, (state, action) => {
+
+            });
+        builder
+            .addCase(checkPaymentStatus.fulfilled, (state, action) => {
+                if (action.payload?.data?.data?.getOrderPaymentStatus?.status) {
+                    toast.success('your payment is done');
+                }
+                if (action.payload?.data.errors?.length && action.payload?.data?.errors[0]?.message) {
+                    toast.error(action.payload?.data?.errors[0]?.message);
+                }
+            });
+        builder
+            .addCase(checkPaymentStatus.rejected, (state, action) => {
                 if (action.payload?.data.errors?.length && action.payload?.data?.errors[0]?.message) {
                     toast.error(action.payload?.data?.errors[0]?.message);
                 }

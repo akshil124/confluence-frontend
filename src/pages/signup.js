@@ -114,7 +114,10 @@ export default function SignUp () {
                             >{passwordShow ? 'hide' : 'show'}</label>
                         </div>
                         {errors.password && <span className="text-red-600 flex pl-4">{errors.password?.message}</span>}
-                        <button type="submit" className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2" >SignUp</button>
+                        <label onClick={() => { navigate('/login'); }}
+                            className="rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer"
+                        >Login Now ?</label>
+                        <button type="submit" className="block w-full bg-indigo-600 mt-2 py-2 rounded-2xl text-white font-semibold mb-2" >SignUp</button>
                     </form>
                 </div>
             </div>

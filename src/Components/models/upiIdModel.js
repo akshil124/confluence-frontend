@@ -26,14 +26,18 @@ export default function UpiIdModel ({ opens, setOpens }) {
         const session = JSON.parse(localStorage.getItem('session'));
         const data = {
             upi_id: e.upi_id,
-            session_id: session
+            session_id: session?.session_id
         };
-        dispatch(createOrderPayUrl(data));
+        dispatch(createOrderPayUrl({ data, onOrderPayUrlCreated }));
         setOpens(!open);
     };
 
+    const onOrderPayUrlCreated = (data) => {
+        window.open(data);
+    };
+
     return (
-        <div
+        open && <div
             className='main-modal fixed w-full inset-0 z-50 overflow-hidden flex justify-center items-center animated faster'
             style={{ background: 'rgba(0,0,0,.7)' }}>
             <div

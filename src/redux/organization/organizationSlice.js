@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createOrganization } from './organizationThunk';
+import { createOrganization, loginOrganization } from './organizationThunk';
 import { toast } from 'react-toastify';
 
 const initialState = {
@@ -29,6 +29,28 @@ export const organizationSlice = createSlice({
             });
         builder
             .addCase(createOrganization.rejected, (state, action) => {
+                if (action.payload?.data.errors?.length && action.payload?.data?.errors[0]?.message) {
+                    toast.error(action.payload?.data?.errors[0]?.message);
+                }
+            });
+        builder
+            .addCase(loginOrganization.pending, (state, action) => {
+
+            });
+        builder
+            .addCase(loginOrganization.fulfilled, (state, action) => {
+                if (action.payload?.data?.data?.loginUser) {
+                    localStorage.clear();
+                    localStorage.setItem('user', JSON.stringify(action.payload?.data?.data?.loginUser));
+                    localStorage.setItem('token', action.payload?.data?.data?.loginUser?.token);
+                    toast.success('Login successfully');
+                }
+                if (action.payload?.data.errors?.length && action.payload?.data?.errors[0]?.message) {
+                    toast.error(action.payload?.data?.errors[0]?.message);
+                }
+            });
+        builder
+            .addCase(loginOrganization.rejected, (state, action) => {
                 if (action.payload?.data.errors?.length && action.payload?.data?.errors[0]?.message) {
                     toast.error(action.payload?.data?.errors[0]?.message);
                 }

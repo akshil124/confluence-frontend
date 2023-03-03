@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { createOrderForOrganization, orderPayUrl } from '../../query/cashFreeUpiQuery';
+import { checkOrderStatus, createOrderForOrganization, orderPayUrl } from '../../query/cashFreeUpiQuery';
 import request from '../../request';
 
 export const createOrderUpi = createAsyncThunk(
@@ -15,11 +15,19 @@ export const createOrderUpi = createAsyncThunk(
 
 export const createOrderPayUrl = createAsyncThunk(
     'create CashFree Order pay url',
-    async ({ data, onCreateOrder }) => {
-        const response = await request({ variables: data, query: orderPayUrl, operationName: 'orderPay' });
+    async ({ data, onOrderPayUrlCreated }) => {
+        const response = await request({ variables: data, query: orderPayUrl, operationName: 'orderPayUrlMutation' });
         if (response?.data?.data) {
-            onCreateOrder();
+            onOrderPayUrlCreated(response?.data?.data?.orderPay?.url);
         }
+        return response;
+    }
+);
+
+export const checkPaymentStatus = createAsyncThunk(
+    'check CashFree Order pay status',
+    async (data) => {
+        const response = await request({ variables: data, query: checkOrderStatus, operationName: 'checkOrderStatusMutation' });
         return response;
     }
 );

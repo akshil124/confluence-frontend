@@ -9,15 +9,16 @@ const Plan = () => {
 
     const planPage = [{ planType: 'Basic', price: '500', message: ['Get started with kanban board', 'Flexible team meetings', '5 Team Leader'] },
         { planType: 'StartUp', price: '1500', message: ['All features in Basic', 'Flexible call scheduling ', '10 Team Leader'] },
-        { planType: 'Enterprise', price: '3000', message: ['All features in Startup', 'Growth oriented', 'As You Want Team Leader'] }];
+        { planType: 'Enterprise', price: '10000', message: ['All features in Startup', 'Growth oriented', 'As You Want Team Leader'] }];
 
-    const buyPlanForOrganization = (amount) => {
+    const buyPlanForOrganization = ({ amount, plan }) => {
         const OrganizationInfo = JSON.parse(localStorage.getItem('createdUser'));
         const data = {
             customer_id: OrganizationInfo._id,
             customer_email: OrganizationInfo.email,
             customer_phone: OrganizationInfo.number,
-            amount
+            amount,
+            plan
         };
         dispatch(createOrderUpi({ data, onCreateOrder }));
     };
