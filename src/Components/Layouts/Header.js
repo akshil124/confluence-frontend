@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import HeaderLogo from '../assets/images/logo.png';
+import HeaderLogo from '../../assets/images/logo.png';
 import { AiFillHome, AiOutlineTeam, AiFillProject, AiFillWechat } from 'react-icons/ai';
 
 const Header = () => {
@@ -39,7 +39,7 @@ const Header = () => {
     return (
         <>
             <nav
-                className="sticky top-0 z-0 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-[0_35px_50px_-15px_rgba(0,0,0,0.3)] z-10">
+                className="sticky top-0 z-0 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow-[0_35px_50px_-15px_rgba(0,0,0,0.2)] z-10">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-start">
