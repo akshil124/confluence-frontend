@@ -42,7 +42,7 @@ const AddUser = () => {
             }
         }).then((res) => {
             toast.success('Add User Successfully');
-            navigate('/user-information');
+            navigate('/organization-information');
         }).catch((err) => {
             toast.error(err?.message);
         });
@@ -81,7 +81,7 @@ const AddUser = () => {
                                     className="bg-gray-300 hover:bg-gray-400 rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer js-password-label"
                                 >{passwordShow ? 'hide' : 'show'}</label>
                             </div>
-                            {errors && errors.password && <p className="text-red-500 text-xs italic">{errors?.password?.message}</p>}
+                            {errors && errors?.password && <p className="text-red-500 text-xs italic">{errors?.password?.message}</p>}
                         </div>
                         <button type="submit" className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">Add User</button>
                     </form>

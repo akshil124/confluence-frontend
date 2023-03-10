@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { addUser } from './../redux/user/userSlice';
+import { addUser } from '../redux/organization/organizationSlice';
 const NEW_USER = gql`
   mutation PostMutation(
     $name:String!,

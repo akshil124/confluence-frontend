@@ -32,7 +32,7 @@ const TableData = () => {
                             <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                                 {ele.role}
                             </td>
-                            <td className="px-6 py-4">
+                            <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">
                                 {ele.gender}
                             </td>
                             <td className="px-6 py-4 bg-gray-50 dark:bg-gray-800">

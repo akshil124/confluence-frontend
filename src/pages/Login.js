@@ -1,28 +1,25 @@
-import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const LOGIN_USER = gql`
-  mutation loginUser(
-    $email: String!
-    $password: String!
-  ) {
-    loginUser(email: $email, password: $password) {
-        email
-        password
-        token
-        category
-        employees
-        name
-    }
-  }
-`;
+import { checkPaymentStatus } from '../redux/cashFree/cashFreeThunk';
+import { useDispatch } from 'react-redux';
+import { loginOrganization } from '../redux/organization/organizationThunk';
+
 const Login = () => {
     const [passwordShow, setPasswordShow] = useState(false);
     const [user, setUser] = useState();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('order_id');
+
+    useEffect(() => {
+        if (orderId) {
+            dispatch(checkPaymentStatus({ order_id: orderId }));
+        }
+    }, []);
+
     const {
         register,
         handleSubmit,
@@ -31,30 +28,11 @@ const Login = () => {
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
-    const [checkAdmin, { error }] = useMutation(LOGIN_USER);
-    const onSubmit = (e) => {
-        checkAdmin({
-            variables: {
-                email: e.email,
-                password: e.password
-            }
-        }).then((res) => {
-            navigate('/');
-            toast.success('Login Successfully');
-            const data = res.data.loginUser;
-            const user = {
-                email: data.email,
-                name: data.name,
-                category: data.category,
-                employees: data.employees
-            };
-            localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('token', res.data.loginUser.token);
-        }).catch((err) => {
-            toast.error('invalid credentials');
-            // eslint-disable-next-line no-console
-            console.log('err', err);
-        });
+    const onSubmit = (data) => {
+        dispatch(loginOrganization({ data, onLoginOrganization }));
+    };
+    const onLoginOrganization = () => {
+        navigate('/');
     };
     return (
         <div className="h-screen flex">
@@ -110,11 +88,11 @@ const Login = () => {
                         {errors.password?.type === 'required' && (
                             <p className="text-red-500 text-sm mt-1 mb-4 pl-4">Password is required.</p>
                         )}
-                        {error && (
-                            <p className="text-red-500 text-sm mt-1 mb-4 pl-4">Password is invalid.</p>
-                        )}
+                        <label onClick={() => { navigate('/signup'); }}
+                            className="rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer"
+                        >Signup Now ?</label>
                     </div>
-                    <button type="submit" className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">Login</button>
+                    <button type="submit" className="block w-full bg-indigo-600 mt-2 py-2 rounded-2xl text-white font-semibold mb-2">Login</button>
                 </form>
             </div>
         </div>
